@@ -7,6 +7,7 @@ This bundle includes:
 
 Presents the complete list of gems installed for the current bundle.
 
+![opening gems from the current bundle](https://f.cloud.github.com/assets/1051/190195/03670698-7ed5-11e2-983d-6da8b0d0dd7a.png)
 
 <br><br>
 
