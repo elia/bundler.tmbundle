@@ -6,6 +6,7 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -wKU
+require 'shellwords'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
 ruby = ENV['TM_RUBY'] || :ruby
@@ -14,7 +15,7 @@ project = ENV['TM_PROJECT_DIRECTORY']
 
 thread = Thread.new do
   hash = {} 
-  _gems = `cd #{project} &amp;&amp; #{ruby} -S bundle list --paths 2&gt; /dev/null`.strip.split("\n")
+  _gems = `cd #{project.shellescape} &amp;&amp; #{ruby} -S bundle list --paths 2&gt; /dev/null`.strip.split("\n")
   _gems.each do |g|
     key = File.basename(g).split('-')[0...-1].join('-')
     hash[key] = g
@@ -22,7 +23,7 @@ thread = Thread.new do
   hash
 end
 
-gems = `cd #{project} &amp;&amp; cat Gemfile.lock`.scan(/^    ([^\( ]+) \(/).flatten.uniq.sort
+gems = `cd #{project.shellescape} &amp;&amp; cat Gemfile.lock`.scan(/^    ([^\( ]+) \(/).flatten.uniq.sort
 gem = TextMate::UI.request_item(:items =&gt; gems, :title =&gt; 'Select the gem to open')
 exit if gem.nil?
 
