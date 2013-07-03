@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+cd "$TM_PROJECT_DIRECTORY"
+echo -n "&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;body{background:#333;color:#eee;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;pre&gt;&lt;code&gt;"
+echo "Using Ruby: $(${TM_RUBY:ruby} -v) "
+${TM_RUBY:ruby} -S bundle install
+echo -n "&lt;/code&gt;&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>name</key>
+	<string>Bundle Install</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>html</string>
+	<key>outputLocation</key>
+	<string>newWindow</string>
+	<key>uuid</key>
+	<string>19A52E0D-4889-4C6C-8BAC-4CFB9E0CE5B0</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
