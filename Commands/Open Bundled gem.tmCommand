@@ -18,7 +18,8 @@ project = ENV['TM_PROJECT_DIRECTORY']
 
 thread = Thread.new do
   Thread.current.abort_on_exception = true
-  YAML.load `cd #{project.shellescape} &amp;&amp; #{ruby} -rrubygems -ryaml -rbundler -e puts YAML.dump(Hash[Bundler.definition.specs.map{ |s| [s.name, s.full_gem_path] }])" 2&gt; /dev/null`
+  dumper = "puts YAML.dump(Hash[Bundler.definition.specs.map{ |s| [s.name, s.full_gem_path] }])"
+  YAML.load `cd #{project.shellescape} &amp;&amp; #{ruby} -rrubygems -ryaml -rbundler -e #{dumper.shellescape} 2&gt; /dev/null`
 end
 
 gems = File.read(File.join(project,'Gemfile.lock')).scan(/^    ([^\( ]+) \(/).flatten.uniq.sort
