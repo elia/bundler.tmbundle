@@ -24,7 +24,7 @@ thread = Thread.new do
   hash
 end
 
-gems = `cd #{project} &amp;&amp; cat Gemfile.lock`.scan(/^    ([^\( ]+) \(/).flatten.uniq.sort
+gems = File.read(File.join(project,'Gemfile.lock')).scan(/^    ([^\( ]+) \(/).flatten.uniq.sort
 gem = TextMate::UI.request_item(:items =&gt; gems, :title =&gt; 'Select the gem to open')
 exit if gem.nil?
 
