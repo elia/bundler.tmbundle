@@ -6,6 +6,8 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -wKU
+require 'shellwords'
+require 'yaml'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
 rvm_auto_ruby = File.join(ENV['HOME'], '.rvm', 'bin', 'rvm-auto-ruby')
@@ -16,13 +18,7 @@ project = ENV['TM_PROJECT_DIRECTORY']
 
 thread = Thread.new do
   Thread.current.abort_on_exception = true
-  hash = {} 
-  _gems = `cd #{project} &amp;&amp; #{ruby} -S bundle list --paths 2&gt; /dev/null`.strip.split("\n")
-  _gems.each do |g|
-    key = File.basename(g).split('-')[0...-1].join('-') if g.include?('/gems/')
-    hash[key] = g
-  end
-  hash
+  YAML.load `cd #{project.shellescape} &amp;&amp; #{ruby} -rrubygems -ryaml -rbundler -e puts YAML.dump(Hash[Bundler.definition.specs.map{ |s| [s.name, s.full_gem_path] }])" 2&gt; /dev/null`
 end
 
 gems = File.read(File.join(project,'Gemfile.lock')).scan(/^    ([^\( ]+) \(/).flatten.uniq.sort
