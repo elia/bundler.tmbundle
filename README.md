@@ -3,7 +3,7 @@
 This is a collection of missing features from [TextMate 2.0 Alpha](http://blog.macromates.com/2011/textmate-2-0-alpha/).
 This bundle includes:
 
-## Bundle Open `⌥⌘O`
+## Bundle Open <kbd>⌥⌘O</kbd>
 
 Presents the complete list of gems installed for the current bundle.
 
