@@ -25,7 +25,13 @@ thread = Thread.new do
   eval dump
 end
 
-gems = File.read(File.join(project,'Gemfile.lock')).scan(/^    ([^\( ]+) \(/).flatten.uniq.sort
+gemfile_lock = File.join(project,'Gemfile.lock')
+unless File.exist? gemfile_lock
+  puts "No Gemfile.lock found, please run bundle install first."
+  exit
+end
+
+gems = File.read(gemfile_lock).scan(/^    ([^\( ]+) \(/).flatten.uniq.sort
 gem = TextMate::UI.request_item(:items =&gt; gems, :title =&gt; 'Select the gem to open')
 exit if gem.nil?
 
