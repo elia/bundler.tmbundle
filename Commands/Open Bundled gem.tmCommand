@@ -14,8 +14,7 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 rvm_auto_ruby = File.join(ENV['HOME'], '.rvm', 'bin', 'rvm-auto-ruby')
 ruby = ENV['TM_RUBY'] || (File.exist?(rvm_auto_ruby) ? rvm_auto_ruby : :ruby)
 
-project = ENV['TM_PROJECT_DIRECTORY']
-
+project = File.exist?(ENV['TM_PROJECT_DIRECTORY']+'/Gemfile.lock') ? ENV['TM_PROJECT_DIRECTORY'] : File.dirname(ENV['TM_FILEPATH'])
 
 thread = Thread.new do
   Thread.current.abort_on_exception = true
