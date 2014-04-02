@@ -10,7 +10,11 @@ cd "$TM_PROJECT_DIRECTORY"
 echo -n "&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;body{background:#333;color:#eee;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;pre&gt;&lt;code&gt;"
 echo "Using Ruby: $(${TM_RUBY:ruby} -v) "
 ${TM_RUBY:ruby} -S bundle install
-echo -n "&lt;/code&gt;&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"
+echo -n "
+&lt;/code&gt;&lt;/pre&gt;
+&lt;span id='scroll_to_here' &gt;&lt;/span&gt;
+&lt;script&gt;window.location.hash = 'scroll_to_here';&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;"
 </string>
 	<key>input</key>
 	<string>none</string>
