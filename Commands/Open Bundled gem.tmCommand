@@ -30,7 +30,7 @@ unless File.exist? gemfile_lock
   exit
 end
 
-gems = File.read(gemfile_lock).scan(/^    ([^\( ]+) \(/).flatten.uniq.sort
+gems = (File.read(gemfile_lock).scan(/^    ([^\( ]+) \(/).flatten + ['bundler']).uniq.sort
 gem = TextMate::UI.request_item(:items =&gt; gems, :title =&gt; 'Select the gem to open')
 exit if gem.nil?
 
