@@ -7,6 +7,11 @@
 	<key>command</key>
 	<string>#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
 
+unless ENV['TM_PROJECT_DIRECTORY']
+  puts 'No TextMate project found'
+  exit
+end
+
 require 'shellwords'
 require 'yaml'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
@@ -19,7 +24,7 @@ project = File.exist?(ENV['TM_PROJECT_DIRECTORY']+'/Gemfile.lock') ? ENV['TM_PRO
 thread = Thread.new do
   Thread.current.abort_on_exception = true
   dumper = 'require "bundler"; p Hash[Bundler.definition.specs.map{ |s| [s.name, s.full_gem_path] }]'
-  dump = `cd #{project.shellescape}; #{ruby} -rrubygems -e #{dumper.shellescape} 2&gt;&amp;1`
+  dump = `cd #{project.shellescape}; #{ruby} -rrubygems -e #{dumper.shellescape} 2&gt; /dev/null`
   raise dump.inspect unless $?.success?
   eval dump
 end
