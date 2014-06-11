@@ -24,8 +24,11 @@ project = File.exist?(ENV['TM_PROJECT_DIRECTORY']+'/Gemfile.lock') ? ENV['TM_PRO
 thread = Thread.new do
   Thread.current.abort_on_exception = true
   dumper = 'require "bundler"; p Hash[Bundler.definition.specs.map{ |s| [s.name, s.full_gem_path] }]'
-  dump = `cd #{project.shellescape}; #{ruby} -rrubygems -e #{dumper.shellescape} 2&gt; /dev/null`
-  raise dump.inspect unless $?.success?
+  dump = `cd #{project.shellescape}; #{ruby} -S bundle check &amp;&amp; #{ruby} -rrubygems -e #{dumper.shellescape} 2&gt;&amp;1`
+  unless $?.success?
+    puts dump
+    exit 0
+  end
   eval dump
 end
 
