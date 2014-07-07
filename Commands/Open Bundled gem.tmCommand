@@ -21,6 +21,12 @@ ruby = ENV['TM_RUBY'] || (File.exist?(rvm_auto_ruby) ? rvm_auto_ruby : :ruby)
 
 project = File.exist?(ENV['TM_PROJECT_DIRECTORY']+'/Gemfile.lock') ? ENV['TM_PROJECT_DIRECTORY'] : File.dirname(ENV['TM_FILEPATH'])
 
+gemfile_lock = File.join(project,'Gemfile.lock')
+unless File.exist? gemfile_lock
+  puts "No Gemfile.lock found, please run bundle install first."
+  exit
+end
+
 thread = Thread.new do
   Thread.current.abort_on_exception = true
   dumper = 'require "bundler"; p Hash[Bundler.definition.specs.map{ |s| [s.name, s.full_gem_path] }]'
@@ -32,12 +38,6 @@ thread = Thread.new do
   dump = `cd #{project.shellescape}; #{ruby} -rrubygems -e #{dumper.shellescape} 2&gt;/dev/null`
   raise `cd #{project.shellescape}; #{ruby} -rrubygems -e #{dumper.shellescape}` unless $?.success?
   eval dump
-end
-
-gemfile_lock = File.join(project,'Gemfile.lock')
-unless File.exist? gemfile_lock
-  puts "No Gemfile.lock found, please run bundle install first."
-  exit
 end
 
 gems = (File.read(gemfile_lock).scan(/^    ([^\( ]+) \(/).flatten + ['bundler']).uniq.sort
