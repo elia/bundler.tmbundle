@@ -20,6 +20,9 @@ rvm_auto_ruby = File.join(ENV['HOME'], '.rvm', 'bin', 'rvm-auto-ruby')
 ruby = ENV['TM_RUBY'] || (File.exist?(rvm_auto_ruby) ? rvm_auto_ruby : :ruby)
 
 project = File.exist?(ENV['TM_PROJECT_DIRECTORY']+'/Gemfile.lock') ? ENV['TM_PROJECT_DIRECTORY'] : File.dirname(ENV['TM_FILEPATH'])
+until File.exist?(File.join(project, 'Gemfile.lock')) or project == '/'
+  project = File.expand_path('..', project)
+end
 
 gemfile_lock = File.join(project,'Gemfile.lock')
 unless File.exist? gemfile_lock
