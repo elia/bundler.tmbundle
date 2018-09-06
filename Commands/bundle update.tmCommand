@@ -10,7 +10,7 @@ cd "$(dirname "$TM_FILENAME")"
 echo -n "&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;body{background:##eee;color:333;font-family:monospace;white-space:pre;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;"
 echo -n "&lt;h3&gt;bundle install&lt;/h3&gt;"
 echo "Using Ruby: $(${TM_RUBY:ruby} -v) "
-${TM_RUBY:ruby} -S bundle install
+${TM_RUBY:ruby} -S bundle update
 echo -n "
 &lt;/code&gt;&lt;/pre&gt;
 &lt;span id='scroll_to_here'&gt;&lt;/span&gt;
@@ -18,13 +18,13 @@ echo -n "
 &lt;/body&gt;&lt;/html&gt;"
 </string>
 	<key>input</key>
-	<string>none</string>
+	<string>selection</string>
 	<key>inputFormat</key>
 	<string>text</string>
 	<key>keyEquivalent</key>
-	<string>@r</string>
+	<string>~@r</string>
 	<key>name</key>
-	<string>Bundle Install</string>
+	<string>Bundle Update</string>
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
@@ -32,9 +32,9 @@ echo -n "
 	<key>outputLocation</key>
 	<string>newWindow</string>
 	<key>scope</key>
-	<string>source.ruby.gemfile</string>
+	<string>source.ruby.gemfile, source.ruby.gemfile attr.test.rspec</string>
 	<key>uuid</key>
-	<string>19A52E0D-4889-4C6C-8BAC-4CFB9E0CE5B0</string>
+	<string>AD478A65-84DB-4FD0-A8D0-4CAC54144240</string>
 	<key>version</key>
 	<integer>2</integer>
 </dict>

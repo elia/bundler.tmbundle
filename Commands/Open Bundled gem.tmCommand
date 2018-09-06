@@ -19,7 +19,7 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 rvm_auto_ruby = File.join(ENV['HOME'], '.rvm', 'bin', 'rvm-auto-ruby')
 ruby = ENV['TM_RUBY'] || (File.exist?(rvm_auto_ruby) ? rvm_auto_ruby : :ruby)
 
-project = File.exist?(ENV['TM_PROJECT_DIRECTORY']+'/Gemfile.lock') ? ENV['TM_PROJECT_DIRECTORY'] : File.dirname(ENV['TM_FILEPATH'])
+project = File.exist?(ENV['TM_PROJECT_DIRECTORY']+'/Gemfile.lock') ? ENV['TM_PROJECT_DIRECTORY'] : File.dirname(ENV['TM_FILEPATH'] || ENV['TM_PROJECT_DIRECTORY'])
 until File.exist?(File.join(project, 'Gemfile.lock')) or project == '/'
   project = File.expand_path('..', project)
 end
@@ -30,16 +30,14 @@ unless File.exist? gemfile_lock
   exit
 end
 
+time_taken = Time.now.to_f
 thread = Thread.new do
   Thread.current.abort_on_exception = true
-  dumper = 'require "bundler"; p Hash[Bundler.definition.specs.map{ |s| [s.name, s.full_gem_path] }]'
-  message = `cd #{project.shellescape}; #{ruby} -S bundle check`
-  unless $?.success?
-    puts message
-    exit 0
-  end
-  dump = `cd #{project.shellescape}; #{ruby} -rrubygems -e #{dumper.shellescape} 2&gt;/dev/null`
-  raise `cd #{project.shellescape}; #{ruby} -rrubygems -e #{dumper.shellescape}` unless $?.success?
+  dumper = 'p Hash[Bundler.definition.specs.map{ |s| [s.name, s.full_gem_path] }]'
+  dump = `cd #{project.shellescape}; #{ruby} -rrubygems -rbundler -e #{dumper.shellescape} 2&gt;/dev/null`
+  p :dump_taken =&gt; (Time.now.to_f - time_taken)
+  raise `cd #{project.shellescape}; #{ruby} -rrubygems -rbundler -e #{dumper.shellescape}` unless $?.success?
+  p :thread_taken =&gt; (Time.now.to_f - time_taken)
   eval dump
 end
 
@@ -47,9 +45,11 @@ gems = (File.read(gemfile_lock).scan(/^    ([^\( ]+) \(/).flatten + ['bundler'])
 gem = TextMate::UI.request_item(:items =&gt; gems, :title =&gt; 'Select the gem to open')
 exit if gem.nil?
 
+time_taken2 = Time.now.to_f
 thread.join
 true_gems = thread.value
 true_gem = true_gems[gem]
+p :thread_taken2 =&gt; (Time.now.to_f - time_taken2)
 system "open txmt://open/?url=file://#{true_gem}"
 </string>
 	<key>input</key>
